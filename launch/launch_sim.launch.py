@@ -12,8 +12,6 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
-
-
     # Include the robot_state_publisher launch file, provided by our own package. Force sim time to be enabled
     # !!! MAKE SURE YOU SET THE PACKAGE NAME CORRECTLY !!!
 
@@ -37,11 +35,23 @@ def generate_launch_description():
                                    '-entity', 'my_bot'],
                         output='screen')
 
+    # Controller manager launcher
+    diff_drive_spawner = Node(
+        package="controller_manager",
+        executable="spawner.py",
+        arguments=["diff_cont"],
+    )
 
-
+    joint_broad_spawner = Node(
+        package="controller_manager",
+        executable="spawner.py",
+        arguments=["joint_broad"],
+    )
     # Launch them all!
     return LaunchDescription([
         rsp,
         gazebo,
         spawn_entity,
+        diff_drive_spawner,
+        joint_broad_spawner
     ])
